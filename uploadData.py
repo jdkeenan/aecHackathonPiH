@@ -3,16 +3,15 @@
 # Something in lines of http://stackoverflow.com/questions/348630/how-can-i-download-all-emails-with-attachments-from-gmail
 # Make sure you have IMAP enabled in your gmail settings.
 # Right now it won't download same file name twice even if their contents are different.
- 
+import random 
 import email
 import getpass, imaplib
 import os
-f = open('/home/pi/aecHackathonPiH/currentDEVICESET', 'r') 
+f = open('/home/pi/currentDEVICESET', 'r') 
 DEVICE = f.read()
 f.close()
-print PRINTER
 import sys
-
+import time
 from boto import dynamodb2
 from boto.dynamodb2.table import Table
 from boto.s3.connection import S3Connection
@@ -35,7 +34,10 @@ if (item):
 	print "yes, We have a match"
 	# we have a print
 	# now we need to retrieve and download that print along with upadte that user that his print is currently being printed
-	item['BatteryPercentage'] = randint(0,100)
+	item['Data']['BatteryPercentage'] = random.randint(0,100)
+	item.save(overwrite=True)
+	time.sleep(5)
+	
 	# here we grab from the s3 bucket
 	# conns3 = S3Connection('AKIAICN44BGVRGEMGI3Q', 'ugchXirJEneSZA0xfSFRCqUeLUZr7yERGTNkUEY0')
 	# print item['queue'][0]
