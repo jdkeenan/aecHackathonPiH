@@ -7,6 +7,9 @@ import random
 import email
 import getpass, imaplib
 import os
+import serial
+glist = glob.glob('/dev/ttyUSB*') + glob.glob('/dev/ttyACM*')
+ser = serial.Serial(glist[0], 9600)
 f = open('/home/pi/currentDEVICESET', 'r') 
 DEVICE = f.read()
 f.close()
@@ -32,6 +35,7 @@ except:
 
 if (item):
 	print "yes, We have a match"
+	s = ser.readline()
 	# we have a print
 	# now we need to retrieve and download that print along with upadte that user that his print is currently being printed
 	item['Data']['BatteryPercentage'] = random.randint(0,100)
