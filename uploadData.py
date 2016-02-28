@@ -86,8 +86,8 @@ while (item):
 	print battery
 	battery = float(battery) + (-1*float(item['Data']['Grid']) * timeStep)
 	print battery
-	if item['Data']['BatteryPercentage'] > 100:
-		item['Data']['BatteryPercentage'] = 100
+	if item['Data']['BatteryPercentage'] > 100.0:
+		item['Data']['BatteryPercentage'] = 100.0
 	item['Data']['BatteryPercentage'] = round(battery,0)
 	item['Data']['Frequency'] = round(item['Data']['Frequency']*10,0)
 	print item['Data']['Frequency']
