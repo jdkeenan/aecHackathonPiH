@@ -36,26 +36,61 @@ except:
 
 while (item):
 	print "yes, We have a match"
+	timeStep = .005;
 	item = table.get_item(deviceName=DEVICE)
 	s = ser.readline()
 	s = ser.readline()
 	batteryNumber = int(item['Data']['BatteryPercentage']/20)
-	print batteryNumber
+	battery = item['Data']['BatteryPercentage']
+
 	ser.write(str(batteryNumber))
 	# we have a print
 	# now we need to retrieve and download that print along with upadte that user that his print is currently being printed
-	print s
-	item['Data']['Frequency'] = int(s.split(',')[0])
-	item['Data']['Intensity'] = int(s.split(',')[1])
-	item['Data']['Button1'] = int(s.split(',')[2])
-	item['Data']['Button2'] = int(s.split(',')[3])
-	print item['Data']
+	incomingFrequency = int(s.split(',')[0])
+	incomingFrequency = (incomingFrequency-60)/20+60
+	item['Data']['Frequency'] = incomingFrequency
+	incomingSolarPower = int(s.split(',')[1])
+	incomingSolarPower = (incomingSolarPower-30)/2
+	if (incomingSolarPower < 0){
+		incomingSolarPower = 0;
+	}
+	if (incomingSolarPower > 100){
+		incomingSolarPower = 100
+	}
+	battery = battery + timeStep*incomingSolarPower;
+	item['Data']['Intensity'] = incomingSolarPower
+	appliance1 = int(s.split(',')[2])
+	if (appliance1 == 1){
+		battery = barrery - (1.0*timeStep)
+	}
+	item['Data']['Button1'] = appliance1
+	appliance2 = int(s.split(',')[3])
+	if (appliance2 == 1){
+		battery = barrery - (1.0*timeStep)
+	}
+	item['Data']['Button2'] = appliance2
+	if (incomingFrequency > 60.5){
+		#we need to take power
+		item['Data']['Grid'] = -3.3
+	}
+	else{
+		if (incomingFrequency < 59.5){
+			#supply Power
+			item['Data']['Grid'] = 3.3
+		}
+		else{
+			item['Data']['Grid'] = 0
+		}
+	}
+	battery = battery + (item['Data']['Grid']*timeStep)
+	
+	item['Data']['BatteryPercentage'] = batteryNumber
 
 
 	item.save(overwrite=True)
-
-	time.sleep(0.5)
+	time.sleep(.5)
 	ser.flushInput()
+	
 	# here we grab from the s3 bucket
 	# conns3 = S3Connection('AKIAICN44BGVRGEMGI3Q', 'ugchXirJEneSZA0xfSFRCqUeLUZr7yERGTNkUEY0')
 	# print item['queue'][0]
