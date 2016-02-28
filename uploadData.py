@@ -4,6 +4,7 @@
 # Make sure you have IMAP enabled in your gmail settings.
 # Right now it won't download same file name twice even if their contents are different.
 import random 
+import glob
 import email
 import getpass, imaplib
 import os
@@ -38,15 +39,15 @@ while (item):
 	item = table.get_item(deviceName=DEVICE)
 	s = ser.readline()
 	batteryNumber = int(item['Data']['BatteryPercentage']/20)
+	print batteryNumber
 	ser.write(batteryNumber)
 	# we have a print
 	# now we need to retrieve and download that print along with upadte that user that his print is currently being printed
-	print s
-	packets = s.split(',')
-	item['Data']['Frequency'] = int(packets[0])
-	item['Data']['Intensity'] = int(packets[1])
-	item['Data']['Button1'] = int(packets[1])
-	item['Data']['Button2'] = int(packets[1])
+	print s.split(',')[0]
+	item['Data']['Frequency'] = int(s.split(',')[0])
+	item['Data']['Intensity'] = int(s.split(',')[1])
+	item['Data']['Button1'] = int(s.split(',')[1])
+	item['Data']['Button2'] = int(s.split(',')[1])
 
 
 
