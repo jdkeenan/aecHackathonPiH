@@ -40,6 +40,7 @@ while (item):
 	item = table.get_item(deviceName=DEVICE)
 	s = ser.readline()
 	s = ser.readline()
+
 	batteryNumber = int(item['Data']['BatteryPercentage']/20)
 	if testfunction:
 		battery = item['Data']['BatteryPercentage']
@@ -85,6 +86,8 @@ while (item):
 	print battery
 	battery = float(battery) + (-1*float(item['Data']['Grid']) * timeStep)
 	print battery
+	if item['Data']['BatteryPercentage'] > 100:
+		item['Data']['BatteryPercentage'] = 100
 	item['Data']['BatteryPercentage'] = round(battery,0)
 	item['Data']['Frequency'] = round(item['Data']['Frequency']*10,0)
 	print item['Data']['Frequency']
