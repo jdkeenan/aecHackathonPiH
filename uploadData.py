@@ -38,22 +38,24 @@ while (item):
 	print "yes, We have a match"
 	item = table.get_item(deviceName=DEVICE)
 	s = ser.readline()
+	s = ser.readline()
 	batteryNumber = int(item['Data']['BatteryPercentage']/20)
 	print batteryNumber
 	ser.write(str(batteryNumber))
 	# we have a print
 	# now we need to retrieve and download that print along with upadte that user that his print is currently being printed
-	print s.split(',')[0]
+	print s
 	item['Data']['Frequency'] = int(s.split(',')[0])
 	item['Data']['Intensity'] = int(s.split(',')[1])
-	item['Data']['Button1'] = int(s.split(',')[1])
-	item['Data']['Button2'] = int(s.split(',')[1])
-
+	item['Data']['Button1'] = int(s.split(',')[2])
+	item['Data']['Button2'] = int(s.split(',')[3])
+	print item['Data']
 
 
 	item.save(overwrite=True)
-	time.sleep(5)
-	
+
+	time.sleep(0.5)
+	ser.flushInput()
 	# here we grab from the s3 bucket
 	# conns3 = S3Connection('AKIAICN44BGVRGEMGI3Q', 'ugchXirJEneSZA0xfSFRCqUeLUZr7yERGTNkUEY0')
 	# print item['queue'][0]
