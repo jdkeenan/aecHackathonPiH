@@ -40,7 +40,7 @@ while (item):
 	s = ser.readline()
 	batteryNumber = int(item['Data']['BatteryPercentage']/20)
 	print batteryNumber
-	ser.write(batteryNumber)
+	ser.write(str(batteryNumber))
 	# we have a print
 	# now we need to retrieve and download that print along with upadte that user that his print is currently being printed
 	print s.split(',')[0]
