@@ -71,14 +71,14 @@ while (item):
 	item['Data']['Button2'] = appliance2
 	if (incomingFrequency > 60.5):
 		#we need to take power
-		item['Data']['Grid'] = -3.3
+		item['Data']['Grid'] = float(-3.3)
 	else:
 		if (incomingFrequency < 59.5):
 			#supply Power
-			item['Data']['Grid'] = 3.3
+			item['Data']['Grid'] = float(3.3)
 		else:
 			item['Data']['Grid'] = 0
-	battery = battery + (item['Data']['Grid']*timeStep)
+	battery = battery + (item['Data']['Grid'] * timeStep)
 	
 	item['Data']['BatteryPercentage'] = batteryNumber
 
