@@ -57,7 +57,7 @@ while (item):
 	if (incomingSolarPower > 100):
 		incomingSolarPower = 100
 	
-	battery = battery + timeStep*incomingSolarPower;
+	battery = battery + float(timeStep)*float(incomingSolarPower);
 	item['Data']['Intensity'] = incomingSolarPower
 	appliance1 = int(s.split(',')[2])
 	if (appliance1 == 1):
