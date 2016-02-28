@@ -53,14 +53,14 @@ while (item):
 	incomingFrequency = (incomingFrequency-60.0)/35.0+60.0
 	item['Data']['Frequency'] = incomingFrequency
 	incomingSolarPower = int(s.split(',')[1])
-	incomingSolarPower = (incomingSolarPower-30)/20
+	incomingSolarPower = (incomingSolarPower-37)/20*100/8
 	if (incomingSolarPower < 0):
 		incomingSolarPower = 0;
 	
 	if (incomingSolarPower > 100):
 		incomingSolarPower = 100
 	incomingSolarPower = incomingSolarPower
-	battery = float(battery) + float(timeStep)*float(incomingSolarPower);
+	battery = float(battery) + float(timeStep)*float(incomingSolarPower)/100;
 	item['Data']['Intensity'] = incomingSolarPower
 	appliance1 = int(s.split(',')[2])
 	if (appliance1 == 1):
@@ -69,7 +69,7 @@ while (item):
 	item['Data']['Button1'] = appliance1
 	appliance2 = int(s.split(',')[3])
 	if (appliance2 == 1):
-		battery = battery - (1.0*timeStep)
+		battery = battery - (3.0*timeStep)
 	
 	item['Data']['Button2'] = appliance2
 	print incomingFrequency
@@ -89,6 +89,7 @@ while (item):
 	item['Data']['BatteryPercentage'] = round(battery,0)
 	if battery > 100.0:
 		item['Data']['BatteryPercentage'] = 100.0
+		battery = 100.0
 	
 	item['Data']['Frequency'] = round(item['Data']['Frequency']*10,0)
 	print item['Data']['Frequency']
