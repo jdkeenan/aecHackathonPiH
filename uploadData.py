@@ -33,56 +33,63 @@ try:
 	print item
 except:
 	item = False
-
+testfunction = True
 while (item):
 	print "yes, We have a match"
-	timeStep = .005;
+	timeStep = 0.005;
 	item = table.get_item(deviceName=DEVICE)
 	s = ser.readline()
 	s = ser.readline()
 	batteryNumber = int(item['Data']['BatteryPercentage']/20)
-	battery = item['Data']['BatteryPercentage']
-
+	if testfunction:
+		battery = item['Data']['BatteryPercentage']
+		testfunction = False
+	print batteryNumber
 	ser.write(str(batteryNumber))
 	# we have a print
 	# now we need to retrieve and download that print along with upadte that user that his print is currently being printed
-	incomingFrequency = int(s.split(',')[0])
-	incomingFrequency = (incomingFrequency-60)/20+60
+	incomingFrequency = float(s.split(',')[0])
+	incomingFrequency = (incomingFrequency-60.0)/35.0+60.0
 	item['Data']['Frequency'] = incomingFrequency
 	incomingSolarPower = int(s.split(',')[1])
-	incomingSolarPower = (incomingSolarPower-30)/2
+	incomingSolarPower = (incomingSolarPower-30)/20
 	if (incomingSolarPower < 0):
 		incomingSolarPower = 0;
 	
 	if (incomingSolarPower > 100):
 		incomingSolarPower = 100
-	
+	incomingSolarPower = incomingSolarPower
 	battery = float(battery) + float(timeStep)*float(incomingSolarPower);
 	item['Data']['Intensity'] = incomingSolarPower
 	appliance1 = int(s.split(',')[2])
 	if (appliance1 == 1):
-		battery = barrery - (1.0*timeStep)
+		battery = battery - (1.0*timeStep)
 	
 	item['Data']['Button1'] = appliance1
 	appliance2 = int(s.split(',')[3])
 	if (appliance2 == 1):
-		battery = barrery - (1.0*timeStep)
+		battery = battery - (1.0*timeStep)
 	
 	item['Data']['Button2'] = appliance2
+	print incomingFrequency
 	if (incomingFrequency > 60.5):
 		#we need to take power
-		item['Data']['Grid'] = float(-3.3)
+		item['Data']['Grid'] = int(-3.3)
 	else:
 		if (incomingFrequency < 59.5):
 			#supply Power
-			item['Data']['Grid'] = float(3.3)
+			item['Data']['Grid'] = int(3.3)
 		else:
 			item['Data']['Grid'] = 0
-	battery = battery + (item['Data']['Grid'] * timeStep)
-	
-	item['Data']['BatteryPercentage'] = batteryNumber
-
-
+	print item['Data']['Grid']
+	print battery
+	battery = float(battery) + (-1*float(item['Data']['Grid']) * timeStep)
+	print battery
+	item['Data']['BatteryPercentage'] = round(battery,0)
+	item['Data']['Frequency'] = round(item['Data']['Frequency']*10,0)
+	print item['Data']['Frequency']
+	print item['Data']['Grid']
+	print item['Data']['BatteryPercentage']
 	item.save(overwrite=True)
 	time.sleep(.5)
 	ser.flushInput()
