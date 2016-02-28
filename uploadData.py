@@ -51,37 +51,33 @@ while (item):
 	item['Data']['Frequency'] = incomingFrequency
 	incomingSolarPower = int(s.split(',')[1])
 	incomingSolarPower = (incomingSolarPower-30)/2
-	if (incomingSolarPower < 0){
+	if (incomingSolarPower < 0):
 		incomingSolarPower = 0;
-	}
-	if (incomingSolarPower > 100){
+	
+	if (incomingSolarPower > 100):
 		incomingSolarPower = 100
-	}
+	
 	battery = battery + timeStep*incomingSolarPower;
 	item['Data']['Intensity'] = incomingSolarPower
 	appliance1 = int(s.split(',')[2])
-	if (appliance1 == 1){
+	if (appliance1 == 1):
 		battery = barrery - (1.0*timeStep)
-	}
+	
 	item['Data']['Button1'] = appliance1
 	appliance2 = int(s.split(',')[3])
-	if (appliance2 == 1){
+	if (appliance2 == 1):
 		battery = barrery - (1.0*timeStep)
-	}
+	
 	item['Data']['Button2'] = appliance2
-	if (incomingFrequency > 60.5){
+	if (incomingFrequency > 60.5):
 		#we need to take power
 		item['Data']['Grid'] = -3.3
-	}
-	else{
-		if (incomingFrequency < 59.5){
+	else:
+		if (incomingFrequency < 59.5):
 			#supply Power
 			item['Data']['Grid'] = 3.3
-		}
-		else{
+		else:
 			item['Data']['Grid'] = 0
-		}
-	}
 	battery = battery + (item['Data']['Grid']*timeStep)
 	
 	item['Data']['BatteryPercentage'] = batteryNumber
