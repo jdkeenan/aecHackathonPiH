@@ -33,12 +33,23 @@ try:
 except:
 	item = False
 
-if (item):
+while (item):
 	print "yes, We have a match"
+	item = table.get_item(deviceName=DEVICE)
 	s = ser.readline()
+	batteryNumber = int(item['Data']['BatteryPercentage']/20)
+	ser.write(batteryNumber)
 	# we have a print
 	# now we need to retrieve and download that print along with upadte that user that his print is currently being printed
-	item['Data']['BatteryPercentage'] = random.randint(0,100)
+	print s
+	packets = s.split(',')
+	item['Data']['Frequency'] = int(packets[0])
+	item['Data']['Intensity'] = int(packets[1])
+	item['Data']['Button1'] = int(packets[1])
+	item['Data']['Button2'] = int(packets[1])
+
+
+
 	item.save(overwrite=True)
 	time.sleep(5)
 	
